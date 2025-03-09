@@ -10,6 +10,7 @@
 
     $database = $factory->createDatabase();
     $auth = $factory->createAuth();
+    $loaners = $database->getReference('loaners')->getValue();
 
 
 ?>

@@ -199,29 +199,6 @@
                             <label for="">Érték (Ft)</label>
                             <input type="number" name="worth" class="form-control">
                         </div>
-                        <!--<div class="form-group mb-3">
-                            <input class="form-check-input" type="checkbox" name="rentable" value="rentable" id="flexCheckDefault" checked>
-                            <label class="form-check-label" for="flexCheckDefault">Kölcsönözhető?</label>
-                        </div> -->
-                        <input type="hidden" name="key" value="<?=$key_child;?>">
-                            <div class="form-group mb-3">
-                                <label for="">Kölcsönző neve</label>
-                                <input type="text" name="rent_name" class="form-control" value="">
-                            </div>            
-                        <div class="form-group mb-3">
-                            <label for="">Kezdeti dátum</label>
-                            <input type="date" name="rent_date1" class="form-control" value="">
-                        </div>
-                            <div class="form-group mb-3">
-                                <label for="">Vége dátum</label>
-                                <input type="date" name="rent_date2" class="form-control" value="">
-                            </div>
-                        
-
-                        <!-- Hidden fields for rental information -->
-                        <input type="hidden" name="renter_name" id="renterNameInput">
-                        <input type="hidden" name="rent_start" id="rentStartInput">
-                        <input type="hidden" name="rent_end" id="rentEndInput">
                         <div class="form-group mb-3">
                             <!--<button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#exampleModal">Kölcsönzés</button>-->
                             <button type="submit" name="new-entry" class="btn btn-success">Könyv felvétele</button>
