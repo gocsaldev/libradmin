@@ -108,7 +108,7 @@ include("includes/header.php");
 
                     
 <!-- Modal -->
-<form action="code.php" method="POST" onsubmit="return validateModalForm()">
+<form action="code.php" method="POST">
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -120,27 +120,25 @@ include("includes/header.php");
                 <input type="hidden" name="key" value="<?=$key_child;?>">
                     <div class="form-group mb-3">
                         <label for="">Név</label>
-                        <input type="text" name="rent_name" class="form-control" value="<?= isset($getdata['rent_name']) ? $getdata['rent_name'] : ''; ?>" required>
+                        <input type="text" name="rent_name" class="form-control" value="<?= $getdata['rent_name']; ?>"">
                     </div>            
                 <div class="form-group mb-3">
                     <label for="">Kezdeti dátum</label>
-                    <input type="date" name="rent_date1" class="form-control" value="<?= isset($getdata['rent_date1']) ? $getdata['rent_date1'] : ''; ?>" required>
+                    <input type="date" name="rent_date1" class="form-control" value="<?= $getdata['rent_date1']; ?>"">
                 </div>
                     <div class="form-group mb-3">
                         <label for="">Vége dátum</label>
-                        <input type="date" name="rent_date2" class="form-control" value="<?= isset($getdata['rent_date2']) ? $getdata['rent_date2'] : ''; ?>" required>
+                        <input type="date" name="rent_date2" class="form-control" value="<?= $getdata['rent_date2']; ?>"">
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <?php if (!empty($getdata['rent_name']) || !empty($getdata['rent_date1']) || !empty($getdata['rent_date2'])): ?>
-                        <button type="submit" name="del-rent" class="btn btn-warning">Visszavonás</button>
-                    <?php endif; ?>
+                <div class="modal-footer">                
                     <button type="submit" name="update-book" class="btn btn-primary">Mentés</button>
                 </div>
             </div>
         </div>
     </div>
 </form>
+
 
 <?php
 include("includes/footer.php");

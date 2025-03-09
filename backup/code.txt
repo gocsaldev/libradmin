@@ -167,29 +167,6 @@ if (isset($_POST['new-entry'])) {
  
 }
 
-// Könyv kölcsönzésének visszavonása
-if(isset($_POST["del-rent"])){
-    $key = $_POST["key"];
-    $updateData = [
-        "rent_name" => "",
-        "rent_date1" => "",
-        "rent_date2" => "",
-    ];
-
-    // Update the SPECIFIC book entry
-    $updateRef = $database->getReference("books/{$key}");
-    $updateResult = $updateRef->update($updateData);
-
-    if($updateResult->getKey()){
-        $_SESSION["status"] = "Kölcsönzés sikeresen visszavonva!";
-    } else {
-        $_SESSION["status"] = "A kölcsönzést nem sikerült visszavonni!";
-    }
-    
-    header("Location: allomany.php");
-    exit(); // Terminate script after redirect
-}
-
 
 // Könyv szerkesztése
 if (isset($_POST["update-book"])) {
