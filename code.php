@@ -236,4 +236,37 @@ if (isset($_POST["update-book"])) {
     header("Location: allomany.php");
     exit(); // Terminate script after redirect
 }
+
+if (isset($_POST['update-book'])) {
+    $key = $_POST['key'];
+    $loaner = $_POST['loaner'];
+    $rent_date1 = $_POST['rent_date1'];
+    $rent_date2 = $_POST['rent_date2'];
+
+    // Debugging statements
+    error_log("Key: " . $key);
+    error_log("Loaner: " . $loaner);
+    error_log("Rent Date 1: " . $rent_date1);
+    error_log("Rent Date 2: " . $rent_date2);
+
+    // Update the database
+    $updateData = [
+        'loaner' => $loaner,
+        'rent_date1' => $rent_date1,
+        'rent_date2' => $rent_date2,
+    ];
+
+    $ref_table = "books/" . $key;
+    $updateQuery = $database->getReference($ref_table)->update($updateData);
+
+    if ($updateQuery) {
+        $_SESSION['status'] = "Book Updated Successfully";
+        header("Location: edit_book.php?id=" . $key);
+        exit();
+    } else {
+        $_SESSION['status'] = "Book Update Failed";
+        header("Location: edit_book.php?id=" . $key);
+        exit();
+    }
+}
 ?>

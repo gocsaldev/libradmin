@@ -108,7 +108,7 @@ include("includes/header.php");
 
                     
 <!-- Modal -->
-<form action="code.php" method="POST" onsubmit="return validateModalForm()">
+<form action="code.php" method="POST">
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -117,25 +117,26 @@ include("includes/header.php");
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                <input type="hidden" name="key" value="<?=$key_child;?>">
+                    <input type="hidden" name="key" value="<?=$key_child;?>">
+                    <input type="hidden" name="rent_name" id="rent_name" value="">
                     <div class="form-group mb-3">
-                                <label for="">Kölcsönző neve</label>
-                                <select name="loaner" id="loaner" class="form-control" required>
-                                    <?php
-                                    if ($loaners) {
-                                        foreach ($loaners as $id => $loaner) {
-                                            echo '<option value="' . htmlspecialchars($id) . '">' . htmlspecialchars($loaner['name']) . '</option>';
-                                        }
-                                    } else {
-                                        echo '<option value="">No loaners found</option>';
-                                    }
-                                    ?>
-                                </select>
-                            </div>            
-                <div class="form-group mb-3">
-                    <label for="">Kezdeti dátum</label>
-                    <input type="date" name="rent_date1" class="form-control" value="<?= isset($getdata['rent_date1']) ? $getdata['rent_date1'] : ''; ?>" required>
-                </div>
+                        <label for="">Kölcsönző neve</label>
+                        <select name="loaner" id="loaner" class="form-control" required onchange="document.getElementById('rent_name').value = this.options[this.selectedIndex].text;">
+                            <?php
+                            if ($loaners) {
+                                foreach ($loaners as $id => $loaner) {
+                                    echo '<option value="' . htmlspecialchars($id) . '">' . htmlspecialchars($loaner['name']) . '</option>';
+                                }
+                            } else {
+                                echo '<option value="">Nem található kölcsönző!</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="">Kezdeti dátum</label>
+                        <input type="date" name="rent_date1" class="form-control" value="<?= isset($getdata['rent_date1']) ? $getdata['rent_date1'] : ''; ?>" required>
+                    </div>
                     <div class="form-group mb-3">
                         <label for="">Vége dátum</label>
                         <input type="date" name="rent_date2" class="form-control" value="<?= isset($getdata['rent_date2']) ? $getdata['rent_date2'] : ''; ?>" required>
