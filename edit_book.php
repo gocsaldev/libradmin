@@ -119,9 +119,19 @@ include("includes/header.php");
                 <div class="modal-body">
                 <input type="hidden" name="key" value="<?=$key_child;?>">
                     <div class="form-group mb-3">
-                        <label for="">Név</label>
-                        <input type="text" name="rent_name" class="form-control" value="<?= isset($getdata['rent_name']) ? $getdata['rent_name'] : ''; ?>" required>
-                    </div>            
+                                <label for="">Kölcsönző neve</label>
+                                <select name="loaner" id="loaner" class="form-control" required>
+                                    <?php
+                                    if ($loaners) {
+                                        foreach ($loaners as $id => $loaner) {
+                                            echo '<option value="' . htmlspecialchars($id) . '">' . htmlspecialchars($loaner['name']) . '</option>';
+                                        }
+                                    } else {
+                                        echo '<option value="">No loaners found</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>            
                 <div class="form-group mb-3">
                     <label for="">Kezdeti dátum</label>
                     <input type="date" name="rent_date1" class="form-control" value="<?= isset($getdata['rent_date1']) ? $getdata['rent_date1'] : ''; ?>" required>
