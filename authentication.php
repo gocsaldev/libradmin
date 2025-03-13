@@ -8,18 +8,21 @@ if(isset($_SESSION['verified_user_id'])){
 
     try {
         $verifiedIdToken = $auth->verifyIdToken($idTokenString);
-        //echo "Working";
-    } catch (FailedToVerifyToken $e) {
-        //echo 'The token is invalid: '.$e->getMessage();
+        // Token is valid, proceed with your logic
+    } catch (Firebase\Auth\Token\Exception\ExpiredToken $e) {
+        // Token is expired, log the user out and redirect to login
+        $_SESSION['expiry_status'] = "Érvénytelen vagy lejárt token! Jelentkezz be újra!";
+        header("Location: logout.php");
+        exit();
+    } catch (Firebase\Auth\Token\Exception\InvalidToken $e) {
+        // Token is invalid
         $_SESSION['expiry_status'] = "Érvénytelen vagy lejárt token! Jelentkezz be újra!";
         header("Location: logout.php");
         exit();
     }
-}
-else {
+} else {
     $_SESSION['status'] = "Jelentkezz be, hogy elérd az oldalt!";
     header("Location: login.php");
     exit();
 }
-
 ?>

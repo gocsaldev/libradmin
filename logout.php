@@ -7,6 +7,8 @@ unset($_SESSION['idTokenString']);
 
 if(isset($_SESSION['expiry_status'])){
     $_SESSION['status'] = "Lejárt token! Jelentkezz be újra!";
+    header("Location: login.php");
+    exit();
 } else {
     $_SESSION['status'] = "Sikeres kijelentkezés!";
     header("Location: login.php");
