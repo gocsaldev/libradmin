@@ -83,6 +83,34 @@ include("includes/header.php");
                                     ?>
                                 </td>
                             </tr>
+                            <tr>
+                                <th>Összes bent lévő könyv</th>
+                                <td>
+                                    <?php
+                                        $books_in = 0;
+                                        foreach ($books as $book) {
+                                            if (!isset($book['rent_name']) || empty($book['rent_name'])) {
+                                                $books_in++;
+                                            }
+                                        }
+                                        echo $books_in;
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Összes kint lévő könyv</th>
+                                <td>
+                                    <?php
+                                        $books_out = 0;
+                                        foreach ($books as $book) {
+                                            if (isset($book['rent_name']) && !empty($book['rent_name'])) {
+                                                $books_out++;
+                                            }
+                                        }
+                                        echo $books_out;
+                                    ?>
+                                </td>
+                            </tr>
                         </thead>
                     </table>
                 </div>
