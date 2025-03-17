@@ -26,7 +26,7 @@
                         </button>
                     </h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style= "overflow: scroll;">
                     <table class="table table-bordered table striped">
                         <thead>
                             <tr>

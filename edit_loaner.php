@@ -14,7 +14,7 @@ include("includes/header.php");
                             <a href="kolcsonzok.php" class="btn btn-danger float-end">Vissza</a>
                         </h4>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style= "overflow: scroll;">
 
                             <?php
                                 include("dbcon.php");

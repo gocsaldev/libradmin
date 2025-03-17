@@ -18,7 +18,7 @@ include("includes/header.php");
                             </button>
                         </h4>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style= "overflow: scroll;">
 
                             <?php
                                 include("dbcon.php");
