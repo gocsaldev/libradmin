@@ -6,7 +6,7 @@ include("includes/header.php");
 <br>
     <div class="row">
         <div class="col-md-12">
-            <div class="card" style="height: 850px;">
+            <div class="card">
                 <div class="card-header">
                     <h4>Statisztika</h4>
                 </div>
