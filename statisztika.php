@@ -43,6 +43,24 @@ include("includes/header.php");
                                     ?>
                                 </td>
                             </tr>
+                            <tr>
+                                <th>Legutóbb regisztrált kölcsönző neve:</th>
+                                <td>
+                                    <?php
+                                        $uid = 0;
+                                        $name = "";
+                                        if(isset($lonaner)){
+                                            foreach ($loaners as $loaner) {
+                                                if (isset($loaner) && $loaner['uid'] > $uid) {
+                                                    $uid = $loaner['uid'];
+                                                    $name = $loaner['name'];
+                                                }
+                                            }
+                                        } else echo "Nincs regisztrált kölcsönző!";
+                                        echo $name;
+                                    ?>
+                                </td>
+                            </tr>
 
                             <!--Könyvek statisztikái-->
                             <tr>

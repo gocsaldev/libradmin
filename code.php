@@ -82,7 +82,25 @@ if(isset($_POST["update-loaner"])){
 
 // Kölcsönző felvétele
 if(isset($_POST["new-loaner"])){
+    // Fetch the last UID from the database
+    $ref_table = "loaners";
+    $fetchdata = $database->getReference($ref_table)->getValue();
+    $lastUid = 0;
+
+    if (!empty($fetchdata) && is_array($fetchdata)) {
+        foreach ($fetchdata as $row) {
+            if (isset($row['uid']) && $row['uid'] > $lastUid) {
+                $lastUid = $row['uid'];
+            }
+        }
+    }
+
+    // Increment the UID
+    $newUid = $lastUid + 1;
+
+    // Prepare the data for the new loaner
     $postData = [
+        "uid" => $newUid,
         "name" => $_POST["name"],
         "add" => $_POST["add"],
         "email" => $_POST["email"],
@@ -90,7 +108,6 @@ if(isset($_POST["new-loaner"])){
         "date" => $currentDateTime = date('Y-m-d H:i:s'),
     ];
 
-    $ref_table = "loaners";
     $postRef = $database->getReference($ref_table)->push($postData);
 
     if($postRef->getKey()){
