@@ -51,7 +51,7 @@ include("includes/header.php");
                 </div>
                 <div class="form-group mb-3">
                     <label for="">Adminisztrációs száma</label>
-                    <input type="text" name="" class="form-control" value="<?=$getdata['uid'];?>" disabled>
+                    <input type="text" name="" class="form-control" value="<?=$key_child?>" disabled>
                 </div>
                 <div class="form-group mb-3">
                     <button type="submit" name="update-loaner" class="btn btn-primary">Szerkesztés</button>

@@ -64,13 +64,7 @@
                                                 continue;
                                             }
                                             ?>
-                                            <tr <?php 
-                                                if (!empty($row['loaner']) && 
-                                                    !empty($row['rent_date2']) && 
-                                                    strtotime($row['rent_date2']) < time()) {
-                                                    echo 'style="background-color: #ffcccc;"';
-                                                }
-                                            ?>>
+                                            <tr>
                                                 <td><?= $i++; ?></td>
                                                 <td><?= htmlspecialchars($row['title'] ?? ''); ?></td>
                                                 <td><?= htmlspecialchars($row['sec_title'] ?? ''); ?></td>
@@ -81,7 +75,19 @@
                                                 <td><?= htmlspecialchars($row['spot'] ?? ''); ?></td>
                                                 <td><?= htmlspecialchars($row['condition'] ?? ''); ?></td>
                                                 <td><?= htmlspecialchars($row['worth'] ?? ''); ?></td>
-                                                <td>
+                                                <td <?php 
+                                                    if (!empty($row['loaner']) && 
+                                                        !empty($row['rent_date2'])) {
+                                                        // Convert rent_date2 to a timestamp for comparison
+                                                        $rent_date2 = strtotime($row['rent_date2']);
+                                                        $current_date = strtotime(date('Y-m-d')); // Get today's date as a timestamp
+
+                                                        // Check if rent_date2 is today or in the past
+                                                        if ($rent_date2 <= $current_date) {
+                                                            echo 'style="background-color: #ffcccc;"';
+                                                        }
+                                                    }
+                                                ?>>
                                                     <?php if (!empty($row['loaner']) && !empty($row['rent_date2'])): ?>
                                                         <div class="text-center">
                                                             <?php
