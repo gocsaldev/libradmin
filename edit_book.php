@@ -121,11 +121,12 @@ include("includes/header.php");
                     <input type="hidden" name="rent_name" id="rent_name" value="">
                     <div class="form-group mb-3">
                         <label for="">Kölcsönző neve</label>
-                        <select name="loaner" id="loaner" class="form-control" required onchange="document.getElementById('rent_name').value = this.options[this.selectedIndex].text;">
+                        <select name="loaner_uid" id="loaner" class="form-control" required>
                             <?php
                             if ($loaners) {
-                                foreach ($loaners as $id => $loaner) {
-                                    echo '<option value="' . htmlspecialchars($id) . '">' . htmlspecialchars($loaner['name']) . '</option>';
+                                // Loop through loaners and use UID as value
+                                foreach ($loaners as $uid => $loaner) {
+                                    echo '<option value="' . htmlspecialchars($uid) . '">' . htmlspecialchars($loaner['name']) . '</option>';
                                 }
                             } else {
                                 echo '<option value="">Nem található kölcsönző!</option>';

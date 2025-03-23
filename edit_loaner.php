@@ -50,6 +50,10 @@ include("includes/header.php");
                     <input type="text" name="" class="form-control" value="<?=$getdata['date'];?>" disabled>
                 </div>
                 <div class="form-group mb-3">
+                    <label for="">Adminisztrációs száma</label>
+                    <input type="text" name="" class="form-control" value="<?=$getdata['uid'];?>" disabled>
+                </div>
+                <div class="form-group mb-3">
                     <button type="submit" name="update-loaner" class="btn btn-primary">Szerkesztés</button>
                 </div>
                 </div>

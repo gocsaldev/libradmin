@@ -210,19 +210,21 @@ if(isset($_POST["del-rent"])){
 
 // Könyv szerkesztése
 if (isset($_POST["update-book"])) {
+    error_log("Form Data: " . json_encode($_POST)); // Log form data
+
     $key = $_POST["key"];
 
-    // Ensure the key is not empty
+    // Validate key
     if (empty($key)) {
         $_SESSION["status"] = "Érvénytelen könyv kulcs!";
         header("Location: allomany.php");
         exit();
     }
 
-    // Create an array to hold only the fields that are being updated
+    // Build update data
     $updateData = [];
 
-    // Add fields to $updateData only if they are provided in the form
+    // Existing fields
     if (!empty($_POST["title"])) $updateData["title"] = $_POST["title"];
     if (!empty($_POST["sec_title"])) $updateData["sec_title"] = $_POST["sec_title"];
     if (!empty($_POST["writer"])) $updateData["writer"] = $_POST["writer"];
@@ -233,10 +235,15 @@ if (isset($_POST["update-book"])) {
     if (!empty($_POST["condition"])) $updateData["condition"] = $_POST["condition"];
     if (!empty($_POST["worth"])) $updateData["worth"] = $_POST["worth"];
     if (!empty($_POST["rent_name"])) $updateData["rent_name"] = $_POST["rent_name"];
+    
+    // Add loaner_uid and rent dates
+    if (!empty($_POST["loaner_uid"])) $updateData["loaner"] = $_POST["loaner_uid"]; // Map to 'loaner' field
     if (!empty($_POST["rent_date1"])) $updateData["rent_date1"] = $_POST["rent_date1"];
     if (!empty($_POST["rent_date2"])) $updateData["rent_date2"] = $_POST["rent_date2"];
 
-    // Update the SPECIFIC book entry
+    error_log("Update Data: " . json_encode($updateData)); // Debug log
+
+    // Update Firebase
     try {
         $updateRef = $database->getReference("books/{$key}");
         $updateResult = $updateRef->update($updateData);
@@ -251,39 +258,5 @@ if (isset($_POST["update-book"])) {
     }
 
     header("Location: allomany.php");
-    exit(); // Terminate script after redirect
+    exit();
 }
-
-if (isset($_POST['update-book'])) {
-    $key = $_POST['key'];
-    $loaner = $_POST['loaner'];
-    $rent_date1 = $_POST['rent_date1'];
-    $rent_date2 = $_POST['rent_date2'];
-
-    // Debugging statements
-    error_log("Key: " . $key);
-    error_log("Loaner: " . $loaner);
-    error_log("Rent Date 1: " . $rent_date1);
-    error_log("Rent Date 2: " . $rent_date2);
-
-    // Update the database
-    $updateData = [
-        'loaner' => $loaner,
-        'rent_date1' => $rent_date1,
-        'rent_date2' => $rent_date2,
-    ];
-
-    $ref_table = "books/" . $key;
-    $updateQuery = $database->getReference($ref_table)->update($updateData);
-
-    if ($updateQuery) {
-        $_SESSION['status'] = "Book Updated Successfully";
-        header("Location: edit_book.php?id=" . $key);
-        exit();
-    } else {
-        $_SESSION['status'] = "Book Update Failed";
-        header("Location: edit_book.php?id=" . $key);
-        exit();
-    }
-}
-?>

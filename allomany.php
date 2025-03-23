@@ -52,6 +52,9 @@
                                     $ref_table = "books";
                                     $fetchdata = $database->getReference($ref_table)->getValue();
 
+                                    // Fetch loaners data (UID-to-name mapping)
+                                    $loaners = $database->getReference('loaners')->getValue(); // Assuming 'loaners' is the table storing loaner data
+
                                     // Check if $fetchdata is a non-empty array
                                     if (!empty($fetchdata) && is_array($fetchdata)) {
                                         $i = 1;
@@ -62,7 +65,7 @@
                                             }
                                             ?>
                                             <tr <?php 
-                                                if (!empty($row['rent_name']) && 
+                                                if (!empty($row['loaner']) && 
                                                     !empty($row['rent_date2']) && 
                                                     strtotime($row['rent_date2']) < time()) {
                                                     echo 'style="background-color: #ffcccc;"';
@@ -79,9 +82,13 @@
                                                 <td><?= htmlspecialchars($row['condition'] ?? ''); ?></td>
                                                 <td><?= htmlspecialchars($row['worth'] ?? ''); ?></td>
                                                 <td>
-                                                    <?php if (!empty($row['rent_name']) && !empty($row['rent_date2'])): ?>
+                                                    <?php if (!empty($row['loaner']) && !empty($row['rent_date2'])): ?>
                                                         <div class="text-center">
-                                                            <?= htmlspecialchars($row['rent_name']) ?><br>
+                                                            <?php
+                                                            // Replace UID with the corresponding name
+                                                            $loaner_name = isset($loaners[$row['loaner']]) ? $loaners[$row['loaner']]['name'] : 'N/A';
+                                                            ?>
+                                                            <?= htmlspecialchars($loaner_name) ?><br>
                                                             <?= htmlspecialchars($row['rent_date2']) ?>
                                                         </div>
                                                     <?php elseif (($row['rentable'] ?? '') === 'rentable'): ?>
