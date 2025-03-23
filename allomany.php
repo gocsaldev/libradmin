@@ -97,13 +97,6 @@
                                                             <?= htmlspecialchars($loaner_name) ?><br>
                                                             <?= htmlspecialchars($row['rent_date2']) ?>
                                                         </div>
-                                                    <?php elseif (($row['rentable'] ?? '') === 'rentable'): ?>
-                                                        <div class="form-check d-flex justify-content-center">
-                                                            <input type="checkbox" 
-                                                                class="form-check-input" 
-                                                                checked
-                                                                disabled>
-                                                        </div>
                                                     <?php else: ?>
                                                         <div class="form-check d-flex justify-content-center">
                                                             <input type="checkbox" 
