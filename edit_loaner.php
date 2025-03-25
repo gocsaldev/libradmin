@@ -63,12 +63,12 @@ include("includes/header.php");
 
                                     } else {
                                         $_SESSION['status'] = "Invalid Id";
-                                        header("Location: index.php");
+                                        header("Location: kolcsonzok.php");
                                         exit();
                                     }
                                 }  else {
                                     $_SESSION['status'] = "Not found";
-                                    header("Location: index.php");
+                                    header("Location: kolcsonzok.php");
                                     exit();
                                 }
                             ?>

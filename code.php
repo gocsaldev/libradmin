@@ -210,7 +210,6 @@ if(isset($_POST["del-rent"])){
 
 // Könyv szerkesztése
 if (isset($_POST["update-book"])) {
-    error_log("Form Data: " . json_encode($_POST)); // Log form data
 
     $key = $_POST["key"];
 
@@ -240,8 +239,6 @@ if (isset($_POST["update-book"])) {
     if (!empty($_POST["loaner_uid"])) $updateData["loaner"] = $_POST["loaner_uid"]; // Map to 'loaner' field
     if (!empty($_POST["rent_date1"])) $updateData["rent_date1"] = $_POST["rent_date1"];
     if (!empty($_POST["rent_date2"])) $updateData["rent_date2"] = $_POST["rent_date2"];
-
-    error_log("Update Data: " . json_encode($updateData)); // Debug log
 
     // Update Firebase
     try {

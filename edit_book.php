@@ -35,7 +35,7 @@ include("includes/header.php");
                 <input type="hidden" name="key" value="<?=$key_child;?>">
                 <div class="form-group mb-3">
                     <label for="">Cím</label>
-                    <input type="text" name="title" class="form-control" value="<?=$getdata['title'];?>">
+                    <input type="text" name="title" class="form-control" value="<?=$getdata['title'];?>" required>
                 </div>
                 <div class="form-group mb-3">
                     <label for="">Alcím</label>
@@ -43,7 +43,7 @@ include("includes/header.php");
                 </div>
                 <div class="form-group mb-3">
                     <label for="">Szerző</label>
-                    <input type="text" name="writer" class="form-control" value="<?=$getdata['writer'];?>">
+                    <input type="text" name="writer" class="form-control" value="<?=$getdata['writer'];?>" required>
                 </div>
                 <div class="form-group mb-3">
                     <label for="">Csoportosítás</label>
@@ -95,13 +95,13 @@ include("includes/header.php");
                             <?php
 
                                     } else {
-                                        $_SESSION['status'] = "Invalid Id";
-                                        header("Location: index.php");
+                                        $_SESSION['status'] = "Hibás ID";
+                                        header("Location: allomany.php");
                                         exit();
                                     }
                                 }  else {
-                                    $_SESSION['status'] = "Not found";
-                                    header("Location: index.php");
+                                    $_SESSION['status'] = "Nem található";
+                                    header("Location: allomany.php");
                                     exit();
                                 }
                             ?>
