@@ -49,14 +49,22 @@ include("includes/header.php");
                                     <?php
                                         $uid = 0;
                                         $name = "";
-                                        if(isset($lonaner)){
+
+                                        // Fetch loaners data from Firebase
+                                        $ref_table = 'loaners';
+                                        $loaners = $database->getReference($ref_table)->getSnapshot()->getValue();
+
+                                        if (isset($loaners) && is_array($loaners)) {
                                             foreach ($loaners as $loaner) {
-                                                if (isset($loaner) && $loaner['uid'] > $uid) {
+                                                if (isset($loaner['uid']) && $loaner['uid'] > $uid) {
                                                     $uid = $loaner['uid'];
                                                     $name = $loaner['name'];
                                                 }
                                             }
-                                        } else echo "Nincs regisztrált kölcsönző!";
+                                        } else {
+                                            echo "Nincs regisztrált kölcsönző!";
+                                        }
+
                                         echo $name;
                                     ?>
                                 </td>
