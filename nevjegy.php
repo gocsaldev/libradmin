@@ -4,7 +4,7 @@
 ?>
 <figure class="text-center">
   <h1 class="display-1">Libradmin</h1>
-  <h1 class="display-6">version α2</h1>
+  <h1 class="display-6">version α3</h1>
 </figure>
 <!-- Névjegyek -->
 <div class="card" style="width: 18rem;">
