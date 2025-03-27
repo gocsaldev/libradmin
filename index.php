@@ -3,7 +3,7 @@
     include("includes/header.php");
 ?>
 
-    <h1>Libradmin Alpha 2 - 2025.03.06.</h1>
+    <h1>Libradmin Alpha 3 - 2025.03.27.</h1>
     <ul>
         <a href="allomany.php"><li>Állomány</li></a>
         <a href="kolcsonzok.php"><li>Kölcsönzők</li></a>
