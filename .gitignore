@@ -1,1 +1,2 @@
-vendor/
+/vendor/
+libradmin-firebase-adminsdk-*.json
