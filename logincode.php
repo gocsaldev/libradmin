@@ -20,8 +20,7 @@ if(isset($_POST['login_btn'])){
                 $_SESSION['idTokenString'] = $idTokenString;
                 $_SESSION['verified_user_id'] = $uid;
 
-                $_SESSION['status'] = "Sikeres bejelentkezés!";
-                header('Location: allomany.php');
+                header('Location: index.php');
                 exit();
 
 

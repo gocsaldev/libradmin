@@ -82,7 +82,25 @@ if(isset($_POST["update-loaner"])){
 
 // Kölcsönző felvétele
 if(isset($_POST["new-loaner"])){
+    // Fetch the last UID from the database
+    $ref_table = "loaners";
+    $fetchdata = $database->getReference($ref_table)->getValue();
+    $lastUid = 0;
+
+    if (!empty($fetchdata) && is_array($fetchdata)) {
+        foreach ($fetchdata as $row) {
+            if (isset($row['uid']) && $row['uid'] > $lastUid) {
+                $lastUid = $row['uid'];
+            }
+        }
+    }
+
+    // Increment the UID
+    $newUid = $lastUid + 1;
+
+    // Prepare the data for the new loaner
     $postData = [
+        "uid" => $newUid,
         "name" => $_POST["name"],
         "add" => $_POST["add"],
         "email" => $_POST["email"],
@@ -90,7 +108,6 @@ if(isset($_POST["new-loaner"])){
         "date" => $currentDateTime = date('Y-m-d H:i:s'),
     ];
 
-    $ref_table = "loaners";
     $postRef = $database->getReference($ref_table)->push($postData);
 
     if($postRef->getKey()){
@@ -193,19 +210,20 @@ if(isset($_POST["del-rent"])){
 
 // Könyv szerkesztése
 if (isset($_POST["update-book"])) {
+
     $key = $_POST["key"];
 
-    // Ensure the key is not empty
+    // Validate key
     if (empty($key)) {
         $_SESSION["status"] = "Érvénytelen könyv kulcs!";
         header("Location: allomany.php");
         exit();
     }
 
-    // Create an array to hold only the fields that are being updated
+    // Build update data
     $updateData = [];
 
-    // Add fields to $updateData only if they are provided in the form
+    // Existing fields
     if (!empty($_POST["title"])) $updateData["title"] = $_POST["title"];
     if (!empty($_POST["sec_title"])) $updateData["sec_title"] = $_POST["sec_title"];
     if (!empty($_POST["writer"])) $updateData["writer"] = $_POST["writer"];
@@ -216,10 +234,13 @@ if (isset($_POST["update-book"])) {
     if (!empty($_POST["condition"])) $updateData["condition"] = $_POST["condition"];
     if (!empty($_POST["worth"])) $updateData["worth"] = $_POST["worth"];
     if (!empty($_POST["rent_name"])) $updateData["rent_name"] = $_POST["rent_name"];
+    
+    // Add loaner_uid and rent dates
+    if (!empty($_POST["loaner_uid"])) $updateData["loaner"] = $_POST["loaner_uid"]; // Map to 'loaner' field
     if (!empty($_POST["rent_date1"])) $updateData["rent_date1"] = $_POST["rent_date1"];
     if (!empty($_POST["rent_date2"])) $updateData["rent_date2"] = $_POST["rent_date2"];
 
-    // Update the SPECIFIC book entry
+    // Update Firebase
     try {
         $updateRef = $database->getReference("books/{$key}");
         $updateResult = $updateRef->update($updateData);
@@ -234,6 +255,5 @@ if (isset($_POST["update-book"])) {
     }
 
     header("Location: allomany.php");
-    exit(); // Terminate script after redirect
+    exit();
 }
-?>

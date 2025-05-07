@@ -1,6 +1,8 @@
 <?php
+    $_POST["navbar"] = 1;
     include('authentication.php');
     include("includes/header.php");
+    include("includes/footer.php");
 ?>
 
 <div class="container">
@@ -13,7 +15,7 @@
                     unset($_SESSION["status"]);
                 }
             ?>
-            <br>
+            
                 <div class="card">
                     <div class="card-header">
                         <h4>
@@ -25,7 +27,6 @@
                         Keresés
                         </button>
                         </h4>
-
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered table striped">
@@ -52,6 +53,9 @@
                                     $ref_table = "books";
                                     $fetchdata = $database->getReference($ref_table)->getValue();
 
+                                    // Fetch loaners data (UID-to-name mapping)
+                                    $loaners = $database->getReference('loaners')->getValue(); // Assuming 'loaners' is the table storing loaner data
+
                                     // Check if $fetchdata is a non-empty array
                                     if (!empty($fetchdata) && is_array($fetchdata)) {
                                         $i = 1;
@@ -61,13 +65,7 @@
                                                 continue;
                                             }
                                             ?>
-                                            <tr <?php 
-                                                if (!empty($row['rent_name']) && 
-                                                    !empty($row['rent_date2']) && 
-                                                    strtotime($row['rent_date2']) < time()) {
-                                                    echo 'style="background-color: #ffcccc;"';
-                                                }
-                                            ?>>
+                                            <tr>
                                                 <td><?= $i++; ?></td>
                                                 <td><?= htmlspecialchars($row['title'] ?? ''); ?></td>
                                                 <td><?= htmlspecialchars($row['sec_title'] ?? ''); ?></td>
@@ -78,18 +76,27 @@
                                                 <td><?= htmlspecialchars($row['spot'] ?? ''); ?></td>
                                                 <td><?= htmlspecialchars($row['condition'] ?? ''); ?></td>
                                                 <td><?= htmlspecialchars($row['worth'] ?? ''); ?></td>
-                                                <td>
-                                                    <?php if (!empty($row['rent_name']) && !empty($row['rent_date2'])): ?>
+                                                <td <?php 
+                                                    if (!empty($row['loaner']) && 
+                                                        !empty($row['rent_date2'])) {
+                                                        // Convert rent_date2 to a timestamp for comparison
+                                                        $rent_date2 = strtotime($row['rent_date2']);
+                                                        $current_date = strtotime(date('Y-m-d')); // Get today's date as a timestamp
+
+                                                        // Check if rent_date2 is today or in the past
+                                                        if ($rent_date2 <= $current_date) {
+                                                            echo 'style="background-color: #ffcccc;"';
+                                                        }
+                                                    }
+                                                ?>>
+                                                    <?php if (!empty($row['loaner']) && !empty($row['rent_date2'])): ?>
                                                         <div class="text-center">
-                                                            <?= htmlspecialchars($row['rent_name']) ?><br>
+                                                            <?php
+                                                            // Replace UID with the corresponding name
+                                                            $loaner_name = isset($loaners[$row['loaner']]) ? $loaners[$row['loaner']]['name'] : 'N/A';
+                                                            ?>
+                                                            <?= htmlspecialchars($loaner_name) ?><br>
                                                             <?= htmlspecialchars($row['rent_date2']) ?>
-                                                        </div>
-                                                    <?php elseif (($row['rentable'] ?? '') === 'rentable'): ?>
-                                                        <div class="form-check d-flex justify-content-center">
-                                                            <input type="checkbox" 
-                                                                class="form-check-input" 
-                                                                checked
-                                                                disabled>
                                                         </div>
                                                     <?php else: ?>
                                                         <div class="form-check d-flex justify-content-center">
@@ -199,37 +206,12 @@
                             <label for="">Érték (Ft)</label>
                             <input type="number" name="worth" class="form-control">
                         </div>
-                        <!--<div class="form-group mb-3">
-                            <input class="form-check-input" type="checkbox" name="rentable" value="rentable" id="flexCheckDefault" checked>
-                            <label class="form-check-label" for="flexCheckDefault">Kölcsönözhető?</label>
-                        </div> -->
-                        <input type="hidden" name="key" value="<?=$key_child;?>">
-                            <div class="form-group mb-3">
-                                <label for="">Kölcsönző neve</label>
-                                <input type="text" name="rent_name" class="form-control" value="">
-                            </div>            
                         <div class="form-group mb-3">
-                            <label for="">Kezdeti dátum</label>
-                            <input type="date" name="rent_date1" class="form-control" value="">
-                        </div>
-                            <div class="form-group mb-3">
-                                <label for="">Vége dátum</label>
-                                <input type="date" name="rent_date2" class="form-control" value="">
-                            </div>
-                        
-
-                        <!-- Hidden fields for rental information -->
-                        <input type="hidden" name="renter_name" id="renterNameInput">
-                        <input type="hidden" name="rent_start" id="rentStartInput">
-                        <input type="hidden" name="rent_end" id="rentEndInput">
-                        <div class="form-group mb-3">
-                            <!--<button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#exampleModal">Kölcsönzés</button>-->
                             <button type="submit" name="new-entry" class="btn btn-success">Könyv felvétele</button>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </form>
 
@@ -319,10 +301,6 @@
                             <label for="">Érték (Ft)</label>
                             <input type="number" name="search_worth" class="form-control">
                         </div>
-                        <!--<div class="form-group mb-3">
-                            <input class="form-check-input" type="checkbox" name="search_rentable" value="rentable" id="flexCheckDefault" checked>
-                            <label class="form-check-label" for="flexCheckDefault">Kölcsönző</label>
-                        </div>-->
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégsem</button>
@@ -365,6 +343,26 @@
     </div>
 </form>
 
-<?php
-    include("includes/footer.php");
-?>
+<button id="scrollToTop" onclick="scrollToTop()">⬆</button>
+<script>
+window.onscroll = function () {
+    const scrollButton = document.getElementById('scrollToTop');
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        scrollButton.style.display = 'block';
+    } else {
+        scrollButton.style.display = 'none';
+    }
+};
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Scroll to the card-body instead of the top of the page
+document.getElementById('scrollToCardButton').addEventListener('click', function() {
+    const cardBody = document.querySelector('.card-body'); // Target the card-body
+    if (cardBody) {
+        cardBody.scrollIntoView({ behavior: 'smooth' });
+    }
+});
+</script>
