@@ -1,4 +1,5 @@
 <?php
+session_start();
     $_POST["navbar"] = 1;
     include('authentication.php');
     include("includes/header.php");
@@ -115,7 +116,7 @@
                                                     </svg>
                                                 </a>
                                                 <!-- Delete Trigger -->
-                                                <button type="button" class="btn btn-danger btn-sm" 
+                                                <button type="submit" class="btn btn-danger btn-sm" 
                                                         data-bs-toggle="modal" 
                                                         data-bs-target="#staticBackdrop"
                                                         data-key="<?= $key ?>">
@@ -123,6 +124,8 @@
                                                         <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
                                                     </svg>
                                                 </button>
+                                                
+                                        
                                             </td>
                                             </tr>
                                             <?php
@@ -230,7 +233,7 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégsem</button>
             <form action="code.php" method="POST">
-                <button type="submit" name="delete-entry" value="<?=$key;?>" class="btn btn-danger">Törlés</button>
+                <button type="submit" name="delete-entry" value="<?=$key?>" class="btn btn-danger">Törlés</button>
             </form>
         </div>
         </div>
@@ -301,6 +304,10 @@
                             <label for="">Érték (Ft)</label>
                             <input type="number" name="search_worth" class="form-control">
                         </div>
+                        <!--<div class="form-group mb-3">
+                            <input class="form-check-input" type="checkbox" name="search_rentable" value="rentable" id="flexCheckDefault" checked>
+                            <label class="form-check-label" for="flexCheckDefault">Kölcsönző</label>
+                        </div>-->
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégsem</button>
@@ -343,26 +350,36 @@
     </div>
 </form>
 
-<button id="scrollToTop" onclick="scrollToTop()">⬆</button>
 <script>
-window.onscroll = function () {
-    const scrollButton = document.getElementById('scrollToTop');
-    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-        scrollButton.style.display = 'block';
-    } else {
-        scrollButton.style.display = 'none';
-    }
-};
+  var deleteModal = document.getElementById('staticBackdrop');
+  deleteModal.addEventListener('show.bs.modal', function (event) {
+      var button = event.relatedTarget;
+      var bookKey = button.getAttribute('data-key');
 
-function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Scroll to the card-body instead of the top of the page
-document.getElementById('scrollToCardButton').addEventListener('click', function() {
-    const cardBody = document.querySelector('.card-body'); // Target the card-body
-    if (cardBody) {
-        cardBody.scrollIntoView({ behavior: 'smooth' });
-    }
-});
+        // Set the value of the hidden input field in the modal
+      var deleteBtn = deleteModal.querySelector('button[name="delete-entry"]');
+      deleteBtn.value = bookKey;
+  });
 </script>
+
+<button id="scrollToTop" onclick="scrollToTop()">⬆</button>
+
+<script>
+    // Show or hide the "Scroll to Top" button based on scroll position of the card-body
+    const cardBody = document.querySelector('.card-body');
+    const scrollToTopButton = document.getElementById('scrollToTop');
+
+    cardBody.addEventListener('scroll', function () {
+        if (cardBody.scrollTop > 200) {
+            scrollToTopButton.style.display = 'block';
+        } else {
+            scrollToTopButton.style.display = 'none';
+        }
+    });
+
+    // Scroll to the top of the card-body
+    function scrollToTop() {
+        cardBody.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+

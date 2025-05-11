@@ -5,8 +5,8 @@
     use Kreait\Firebase\Auth;
     
     $factory = (new Factory)
-    ->withServiceAccount('libradmin-firebase-adminsdk-fbsvc-a3a8ee517f.json')
-    ->withDatabaseUri('https://libradmin-default-rtdb.firebaseio.com/');
+    ->withServiceAccount('final-libradmin-firebase-adminsdk-fbsvc-baf9883481.json')
+    ->withDatabaseUri('https://final-libradmin-default-rtdb.europe-west1.firebasedatabase.app');
 
     $database = $factory->createDatabase();
     $auth = $factory->createAuth();

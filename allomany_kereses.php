@@ -38,6 +38,7 @@ include("includes/footer.php");
         <div class="card">
             <div class="card-header">
                 <h4>Keresési eredmények</h4>
+                <a href="allomany.php" class="btn btn-danger float-end">Vissza</a>
             </div>
             <div class="card-body" style="overflow: scroll;">
                 <table class="table table-bordered table striped">
@@ -53,7 +54,7 @@ include("includes/footer.php");
                             <th>Fizikai elhelyezkedés</th>
                             <th>Állapot</th>
                             <th>Érték</th>
-                            <th>Kölcsönözhető?</th>
+                            <th>Kölcsönző</th>
                             <th>Műveletek</th>
                         </tr>
                     </thead>
@@ -107,14 +108,36 @@ include("includes/footer.php");
                             <td><?= htmlspecialchars($row['spot'] ?? ''); ?></td>
                             <td><?= htmlspecialchars($row['condition'] ?? ''); ?></td>
                             <td><?= htmlspecialchars($row['worth'] ?? ''); ?></td>
-                            <td>
-                                <div class="form-check d-flex justify-content-center">
-                                    <input type="checkbox" 
-                                           class="form-check-input" 
-                                           <?= ($row['rentable'] ?? '') === 'rentable' ? 'checked' : '' ?>
-                                           disabled>
-                                </div>
-                            </td>
+                            <td <?php 
+                                                    if (!empty($row['loaner']) && 
+                                                        !empty($row['rent_date2'])) {
+                                                        // Convert rent_date2 to a timestamp for comparison
+                                                        $rent_date2 = strtotime($row['rent_date2']);
+                                                        $current_date = strtotime(date('Y-m-d')); // Get today's date as a timestamp
+
+                                                        // Check if rent_date2 is today or in the past
+                                                        if ($rent_date2 <= $current_date) {
+                                                            echo 'style="background-color: #ffcccc;"';
+                                                        }
+                                                    }
+                                                ?>>
+                                                    <?php if (!empty($row['loaner']) && !empty($row['rent_date2'])): ?>
+                                                        <div class="text-center">
+                                                            <?php
+                                                            // Replace UID with the corresponding name
+                                                            $loaner_name = isset($loaners[$row['loaner']]) ? $loaners[$row['loaner']]['name'] : 'N/A';
+                                                            ?>
+                                                            <?= htmlspecialchars($loaner_name) ?><br>
+                                                            <?= htmlspecialchars($row['rent_date2']) ?>
+                                                        </div>
+                                                    <?php else: ?>
+                                                        <div class="form-check d-flex justify-content-center">
+                                                            <input type="checkbox" 
+                                                                class="form-check-input" 
+                                                                disabled>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </td>
                             <td>
                                 <a href="edit_book.php?id=<?= $key; ?>" class="btn btn-primary btn-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -180,4 +203,25 @@ include("includes/footer.php");
             document.getElementById('deleteKey').value = this.getAttribute('data-key');
         });
     });
+</script>
+
+<button id="scrollToTop" onclick="scrollToTop()">⬆</button>
+
+<script>
+    // Show or hide the "Scroll to Top" button based on scroll position of the card-body
+    const cardBody = document.querySelector('.card-body');
+    const scrollToTopButton = document.getElementById('scrollToTop');
+
+    cardBody.addEventListener('scroll', function () {
+        if (cardBody.scrollTop > 200) {
+            scrollToTopButton.style.display = 'block';
+        } else {
+            scrollToTopButton.style.display = 'none';
+        }
+    });
+
+    // Scroll to the top of the card-body
+    function scrollToTop() {
+        cardBody.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 </script>

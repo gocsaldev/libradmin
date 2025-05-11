@@ -23,24 +23,26 @@ include("includes/footer.php");
 </script>
 <script>
     window.onload = function () {
-        const elements = document.querySelectorAll('*'); // Minden elem kiválasztása
+        const elements = document.querySelectorAll('*');
         elements.forEach((element) => {
-            element.classList.add('fade-in'); // Fade-in osztály hozzáadása
+            element.classList.add('fade-in');
         });
+
+        const loanerDropdown = document.getElementById('loaner');
+        const selectedOption = loanerDropdown.options[loanerDropdown.selectedIndex];
+        const rentNameField = document.getElementById('rent_name');
+        rentNameField.value = selectedOption.text;
     };
 </script>
 
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center d-flex">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
                     <h4>
                         Könyv szerkesztés
                         <a href="allomany.php" class="btn btn-danger float-end">Vissza</a>
-                        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            Kölcsönzés
-                        </button>
                     </h4>
                 </div>
                 <div class="card-body" style="overflow: scroll;">
@@ -124,54 +126,74 @@ include("includes/footer.php");
                         exit();
                     }
                     ?>
-                    <!-- Modal -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Kölcsönzés</h4>
+                </div>
+                <div class="card-body" style="overflow: scroll;">
                     <form action="code.php" method="POST">
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Kölcsönzés</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <input type="hidden" name="key" value="<?= $key_child; ?>">
-                                        <input type="hidden" name="rent_name" id="rent_name" value="">
-                                        <div class="form-group mb-3">
-                                            <label for="">Kölcsönző neve</label>
-                                            <select name="loaner_uid" id="loaner" class="form-control" required>
-                                                <?php
-                                                if ($loaners) {
-                                                    // Loop through loaners and use UID as value
-                                                    foreach ($loaners as $uid => $loaner) {
-                                                        echo '<option value="' . htmlspecialchars($uid) . '">' . htmlspecialchars($loaner['name']) . '</option>';
-                                                    }
-                                                } else {
-                                                    echo '<option value="">Nem található kölcsönző!</option>';
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label for="">Kezdeti dátum</label>
-                                            <input type="date" name="rent_date1" class="form-control" value="<?= isset($getdata['rent_date1']) ? $getdata['rent_date1'] : ''; ?>" required>
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label for="">Vége dátum</label>
-                                            <input type="date" name="rent_date2" class="form-control" value="<?= isset($getdata['rent_date2']) ? $getdata['rent_date2'] : ''; ?>" required>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <?php if (!empty($getdata['rent_name']) || !empty($getdata['rent_date1']) || !empty($getdata['rent_date2'])) : ?>
-                                            <button type="submit" name="del-rent" class="btn btn-warning">Visszavonás</button>
-                                        <?php endif; ?>
-                                        <button type="submit" name="update-book" class="btn btn-primary">Mentés</button>
-                                    </div>
-                                </div>
-                            </div>
+                        <input type="hidden" name="key" value="<?= $key_child; ?>">
+                        <input type="hidden" name="rent_name" id="rent_name" value="">
+                        <div class="form-group mb-3">
+                            <label for="">Kölcsönző neve</label>
+                            <?php                             
+                            // Check if book is rented out by checking rent_name instead of loaner_uid
+                            $isRented = !empty($getdata['rent_name']);
+                            
+                            if ($isRented): ?>
+                                <!-- Display a read-only textbox if the book is already rented -->
+                                <input type="text" class="form-control" value="<?= htmlspecialchars($getdata['rent_name']); ?>" disabled>
+                                <input type="hidden" name="rent_name" value="<?= htmlspecialchars($getdata['rent_name']); ?>">
+                                <?php
+                                // Find the loaner_uid by matching the name
+                                foreach ($loaners as $uid => $loaner) {
+                                    if ($loaner['name'] === $getdata['rent_name']) {
+                                        echo '<input type="hidden" name="loaner_uid" value="' . htmlspecialchars($uid) . '">';
+                                        break;
+                                    }
+                                }
+                                ?>
+                            <?php else: ?>
+                                <!-- Only show dropdown when no current loaner -->
+                                <select name="loaner_uid" id="loaner" class="form-control" required>
+                                    <option value="">Válasszon kölcsönzőt...</option>
+                                    <?php
+                                    if (!empty($loaners)) {
+                                        foreach ($loaners as $uid => $loaner) {
+                                            echo '<option value="' . htmlspecialchars($uid) . '">' . htmlspecialchars($loaner['name']) . '</option>';
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            <?php endif; ?>
                         </div>
+                        <div class="form-group mb-3">
+                            <label for="">Kezdeti dátum</label>
+                            <input type="date" name="rent_date1" class="form-control" value="<?= isset($getdata['rent_date1']) ? $getdata['rent_date1'] : ''; ?>" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="">Vége dátum</label>
+                            <input type="date" name="rent_date2" class="form-control" value="<?= isset($getdata['rent_date2']) ? $getdata['rent_date2'] : ''; ?>" required>
+                        </div>
+                        <?php if (!empty($getdata['rent_name']) || !empty($getdata['rent_date1']) || !empty($getdata['rent_date2'])) : ?>
+                        <button type="submit" name="del-rent" class="btn btn-warning">Visszavonás</button>
+                        <?php endif; ?>
+                        <button type="submit" name="update-book" class="btn btn-primary">Mentés</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    // Update the hidden rent_name field based on the selected loaner
+    document.getElementById('loaner').addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const rentNameField = document.getElementById('rent_name');
+        rentNameField.value = selectedOption.text;
+    });
+</script>

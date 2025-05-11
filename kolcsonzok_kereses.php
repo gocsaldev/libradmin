@@ -36,6 +36,7 @@ include("includes/footer.php");
                 <div class="card-header">
                     <h4>
                         Keresési eredmények
+                        <a href="kolcsonzok.php" class="btn btn-danger float-end">Vissza</a>
                     </h4>
                 </div>
                 <div class="card-body" style="overflow: scroll;">
@@ -144,3 +145,24 @@ include("includes/footer.php");
         </div>
     </div>
 </div>
+
+<button id="scrollToTop" onclick="scrollToTop()">⬆</button>
+
+<script>
+    // Show or hide the "Scroll to Top" button based on scroll position of the card-body
+    const cardBody = document.querySelector('.card-body');
+    const scrollToTopButton = document.getElementById('scrollToTop');
+
+    cardBody.addEventListener('scroll', function () {
+        if (cardBody.scrollTop > 200) {
+            scrollToTopButton.style.display = 'block';
+        } else {
+            scrollToTopButton.style.display = 'none';
+        }
+    });
+
+    // Scroll to the top of the card-body
+    function scrollToTop() {
+        cardBody.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>

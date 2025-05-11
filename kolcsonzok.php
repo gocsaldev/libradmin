@@ -206,3 +206,36 @@
     </div>
   </div>
 </div>
+
+<script>
+  var deleteModal = document.getElementById('staticBackdrop');
+  deleteModal.addEventListener('show.bs.modal', function (event) {
+      var button = event.relatedTarget;
+      var bookKey = button.getAttribute('data-key');
+
+        // Set the value of the hidden input field in the modal
+      var deleteBtn = deleteModal.querySelector('button[name="delete-loaner"]');
+      deleteBtn.value = bookKey;
+  });
+</script>
+
+<button id="scrollToTop" onclick="scrollToTop()">⬆</button>
+
+<script>
+    // Show or hide the "Scroll to Top" button based on scroll position of the card-body
+    const cardBody = document.querySelector('.card-body');
+    const scrollToTopButton = document.getElementById('scrollToTop');
+
+    cardBody.addEventListener('scroll', function () {
+        if (cardBody.scrollTop > 200) {
+            scrollToTopButton.style.display = 'block';
+        } else {
+            scrollToTopButton.style.display = 'none';
+        }
+    });
+
+    // Scroll to the top of the card-body
+    function scrollToTop() {
+        cardBody.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
